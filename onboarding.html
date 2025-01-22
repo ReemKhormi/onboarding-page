@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding الموظف الجديد</title>
+    <style>
+        body { font-family: Arial, sans-serif; direction: rtl; text-align: right; margin: 20px; }
+        .container { max-width: 400px; margin: auto; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+        .checklist { list-style: none; padding: 0; }
+        .checklist li { margin: 10px 0; }
+        input[type="checkbox"] { margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Onboarding الموظف الجديد</h2>
+
+        <label for="name">اسم الموظف:</label>
+        <input type="text" id="name" placeholder="أدخل اسم الموظف">
+
+        <label for="email">البريد الإلكتروني:</label>
+        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+
+        <label for="department">القسم:</label>
+        <input type="text" id="department" placeholder="أدخل القسم">
+
+        <h3>قائمة الصلاحيات</h3>
+        <ul class="checklist">
+            <li><input type="checkbox" id="user"> حساب المستخدم (User Account)</li>
+            <li><input type="checkbox" id="jira"> الوصول إلى Jira</li>
+            <li><input type="checkbox" id="mattermost"> الوصول إلى Mattermost</li>
+            <li><input type="checkbox" id="emailAccess"> تفعيل البريد الإلكتروني</li>
+            <li><input type="checkbox" id="receive"> استلام في Mattermost</li>
+        </ul>
+
+        <button onclick="saveData()">حفظ البيانات</button>
+    </div>
+
+    <script>
+        function saveData() {
+            let employeeData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                department: document.getElementById("department").value,
+                permissions: {
+                    user: document.getElementById("user").checked,
+                    jira: document.getElementById("jira").checked,
+                    mattermost: document.getElementById("mattermost").checked,
+                    emailAccess: document.getElementById("emailAccess").checked,
+                    receive: document.getElementById("receive").checked
+                }
+            };
+            localStorage.setItem("employeeData", JSON.stringify(employeeData));
+            alert("تم حفظ البيانات بنجاح!");
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        window.onload = function() {
+            let savedData = JSON.parse(localStorage.getItem("employeeData"));
+            if (savedData) {
+                document.getElementById("name").value = savedData.name;
+                document.getElementById("email").value = savedData.email;
+                document.getElementById("department").value = savedData.department;
+                document.getElementById("user").checked = savedData.permissions.user;
+                document.getElementById("jira").checked = savedData.permissions.jira;
+                document.getElementById("mattermost").checked = savedData.permissions.mattermost;
+                document.getElementById("emailAccess").checked = savedData.permissions.emailAccess;
+                document.getElementById("receive").checked = savedData.permissions.receive;
+            }
+        };
+    </script>
+
+</body>
+</html>
